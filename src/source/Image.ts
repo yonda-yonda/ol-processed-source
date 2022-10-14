@@ -14,7 +14,7 @@ import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
-} from "~/const";
+} from "~/constants";
 import {
     is4326,
     is3857,

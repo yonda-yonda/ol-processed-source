@@ -30,7 +30,7 @@ import { register as olRegister } from "ol/proj/proj4";
 import { utils } from "geo4326";
 
 import { ImageSource } from "../../source/Image";
-import { CANVAS_MAX_PIXEL } from "../../const";
+import { CANVAS_MAX_PIXEL } from "../../constants";
 
 const CodeStatus = styled("div")({
   fontSize: "12px",

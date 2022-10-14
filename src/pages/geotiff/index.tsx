@@ -37,7 +37,7 @@ import { utils } from "geo4326";
 
 import { GeoTIFFSource } from "../../source/GeoTIFF";
 import { colormaps, rendermodes } from "../../geotiff/Reader";
-import { CANVAS_MAX_PIXEL } from "../../const";
+import { CANVAS_MAX_PIXEL } from "../../constants";
 
 const FileInputWrapper = styled("dl")({
   margin: "0 0 50px",
