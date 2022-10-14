@@ -82,7 +82,7 @@ const StyledUl = styled("ul")({
   },
 });
 
-type Input = {
+interface Input {
   code: string;
   type: string;
   url: string;
@@ -92,7 +92,7 @@ type Input = {
   rotate: string;
 };
 
-type SubmitProps = {
+interface SubmitProps {
   id: string;
   source: Input;
 };
@@ -105,7 +105,7 @@ type FormError =
   | "FailedLoadSource"
   | "UnsupportedCrs";
 
-type LayerConf = {
+interface LayerConf {
   layer: TileLayer<ImageSource>;
   name: string;
   id: string;
