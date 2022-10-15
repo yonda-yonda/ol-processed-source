@@ -3,7 +3,7 @@ import {
     fromBlob,
     GeoTIFFImage
 } from "geotiff";
-import { rotate, rotatePixelExtent } from "~/utils";
+import { rotate, rotatePixelExtent } from "../utils";
 export * as reader from "./Reader";
 export * as processor from "./Processor";
 

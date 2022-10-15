@@ -14,7 +14,7 @@ import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
-} from "~/constants";
+} from "../constants";
 import {
     is4326,
     is3857,
@@ -24,7 +24,7 @@ import {
     adjustSize,
     clear,
     rotatePixelExtent,
-} from "~/utils";
+} from "../utils";
 import { BaseSource, Options as BaseOptions } from "./Base";
 
 export type ImageSourceProps = {

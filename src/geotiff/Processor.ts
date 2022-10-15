@@ -1,16 +1,16 @@
 
-import { Reader, Layer, RenderMode } from "~/geotiff/Reader";
-import { getTransformedCoordinates } from "~/geotiff";
+import { Reader, Layer, RenderMode } from "./Reader";
+import { getTransformedCoordinates } from "./index";
 import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
-} from "~/constants";
+} from "../constants";
 import {
     adjustSize,
     clear,
     rotatePixelExtent,
-} from "~/utils";
+} from "../utils";
 
 export interface SampleConfig {
     index: number;

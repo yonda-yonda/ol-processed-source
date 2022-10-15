@@ -4,7 +4,7 @@ import {
   adjustSize,
   normalize,
   rotate
-} from "~/utils";
+} from "./utils";
 
 it("crossing", () => {
   expect(crossing([

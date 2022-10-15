@@ -14,9 +14,9 @@ import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
-} from "~/constants";
-import { getProfile, Profile } from "~/geotiff";
-import { Processor, CreateProcessorProps } from "~/geotiff/Processor";
+} from "../constants";
+import { getProfile, Profile } from "../geotiff";
+import { Processor, CreateProcessorProps } from "../geotiff/Processor";
 import {
     is4326,
     is3857,
@@ -24,10 +24,10 @@ import {
     getWindow,
     crossing,
     clear,
-} from "~/utils";
+} from "../utils";
 import { BaseSource, Options as BaseOptions } from "./Base";
 
-export type { SampleConfig, SourceConfig } from "~/geotiff/Processor";
+export type { SampleConfig, SourceConfig } from "../geotiff/Processor";
 
 export type GeoTIFFSourceProps = {
     minZoom?: number;

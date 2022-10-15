@@ -8,8 +8,8 @@ import {
     TypedArray,
 } from "geotiff";
 
-import { normalize } from "~/utils";
-import { getBandCount, getUnit, getCode, getDataRange } from "~/geotiff";
+import { normalize } from "../utils";
+import { getBandCount, getUnit, getCode, getDataRange } from "./index";
 
 let pool: Pool | null = null;
 const getPool = () => {
