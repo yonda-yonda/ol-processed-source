@@ -1,20 +1,28 @@
-import colormap from "colormap";
 import {
     fromUrl,
     fromBlob,
     GeoTIFF,
     GeoTIFFImage,
     Pool,
-    TypedArray,
 } from "geotiff";
 
-import { normalize } from "../utils";
-import { getBandCount, getUnit, getCode, getDataRange } from "./index";
+import {
+    getDataRange,
+    RenderProps,
+    RasterProps,
+    RasterValue,
+    getBandCount,
+    getCode,
+    getColor,
+    getUnit,
+} from "./index";
+import { normalize } from "../../utils";
 
 let pool: Pool | null = null;
 const getPool = () => {
     if (!pool) pool = new Pool();
     return pool;
+    return null;
 };
 
 /*
@@ -73,108 +81,7 @@ context.putImageData(arr, 0, 0);
 
 */
 
-export interface Sample {
-    index: number;
-    bands: number[]; // 1-based
-    window?: number[];
-    nodata?: number;
-    resampleMethod?: string;
-}
-
-export interface Layer {
-    index: number;
-    min?: number;
-    max?: number;
-}
-
-export interface Source extends Sample {
-    width?: number;
-    height?: number;
-}
-
-export interface RasterProps {
-    sources: Source[];
-}
-
-export interface RasterValue {
-    data: TypedArray[];
-    width: number;
-    height: number;
-    nodata: number;
-    range: [number, number];
-}
-
-export const rendermodes = ["rgb", "single", "ndi"] as const;
-export type RenderMode = typeof rendermodes[number];
-
-export interface RenderProps {
-    mode: RenderMode;
-    samples: Sample[];
-    width?: number;
-    height?: number;
-    layers?: Layer[];
-    alpha?: boolean;
-    cmap?: string;
-}
-
-export const colormaps = [
-    "jet",
-    "hsv",
-    "hot",
-    "spring",
-    "summer",
-    "autumn",
-    "winter",
-    "bone",
-    "copper",
-    "greys",
-    "yignbu",
-    "greens",
-    "yiorrd",
-    "bluered",
-    "rdbu",
-    "picnic",
-    "rainbow",
-    "portland",
-    "blackbody",
-    "earth",
-    "electric",
-    "alpha",
-    "viridis",
-    "inferno",
-    "magma",
-    "plasma",
-    "warm",
-    "cool",
-    "rainbow-soft",
-    "bathymetry",
-    "cdom",
-    "chlorophyll",
-    "density",
-    "freesurface-blue",
-    "freesurface-red",
-    "oxygen",
-    "par",
-    "phase",
-    "salinity",
-    "temperature",
-    "turbidity",
-    "velocity-blue",
-    "velocity-green",
-    "cubehelix",
-];
-
-export const getColor = (cmap: string): [number, number, number, number][] => {
-    if (!colormaps.includes(cmap)) throw new Error("Unsupproted cmap.");
-    return colormap({
-        colormap: cmap,
-        nshades: 256,
-        format: "rgba",
-        alpha: 1,
-    });
-};
-
-export class Reader {
+export default class Reader {
     private files: File[];
     private urls: string[];
     private tiffs: GeoTIFF[];
@@ -466,4 +373,3 @@ export class Reader {
         return new ImageData(data, dstWidth, dstHeight);
     }
 }
-

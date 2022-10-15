@@ -15,8 +15,8 @@ import {
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
 } from "../constants";
-import { getProfile, Profile } from "../geotiff";
-import { Processor, CreateProcessorProps } from "../geotiff/Processor";
+import { getProfile, Profile } from "../reader/geotiff/Profile";
+import Processor, { CreateProcessorProps } from "../reader/geotiff/Processor";
 import {
     is4326,
     is3857,
@@ -27,9 +27,9 @@ import {
 } from "../utils";
 import { BaseSource, Options as BaseOptions } from "./Base";
 
-export type { SampleConfig, SourceConfig } from "../geotiff/Processor";
+export type { SampleConfig, SourceConfig } from "../reader/geotiff/Processor";
 
-export type GeoTIFFSourceProps = {
+export type GeoTIFFProps = {
     minZoom?: number;
     maxZoom?: number;
     tileSize?: number;
@@ -37,7 +37,7 @@ export type GeoTIFFSourceProps = {
     "tileGrid" | "tileLoadFunction" | "tilePixelRatio" | "tileUrlFunction" |
     "crossOrigin" | "projection" | "state" | "url" | "urls">;
 
-export class GeoTIFFSource extends BaseSource {
+export default class GeoTIFF extends BaseSource {
     private processor_: Processor | null;
     private tileSize_: number;
     private isGlobalGrid_: boolean;
@@ -45,7 +45,7 @@ export class GeoTIFFSource extends BaseSource {
     private gridExtent_: Extent | null;
     private profile_: Profile | null;
 
-    constructor(userOptions: GeoTIFFSourceProps) {
+    constructor(userOptions: GeoTIFFProps) {
         const options = Object.assign({
             maxPixel: CANVAS_MAX_PIXEL,
             maxWidth: CANVAS_MAX_WIDTH,
@@ -260,7 +260,7 @@ export class GeoTIFFSource extends BaseSource {
         }
     }
 
-    private async setup_(options: GeoTIFFSourceProps): Promise<void> {
+    private async setup_(options: GeoTIFFProps): Promise<void> {
         if (options.files)
             this.profile_ = await getProfile(options.files[0]);
         else if (options.urls)

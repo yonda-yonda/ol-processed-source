@@ -25,7 +25,7 @@ Also, the performance of `Reader.render` is not optimal.
 1. Saved as a canvas element.
 1. Cut out from canvas to each tile.
 
-## ImageSource
+## ImageStatic
 
 Alternative to `ol.source.ImageStatic`.
 
@@ -36,7 +36,7 @@ Alternative to `ol.source.ImageStatic`.
 ### Sample
 
 ```Javascript
-const imageSource = new ImageSource({
+const imageSource = new ImageStatic({
     projection: "EPSG:27700",
     url: "https://~",
     imageExtent: [0, 0, 700000, 1300000],
@@ -86,7 +86,7 @@ imageSource.release();
 
 For other props, refer to TileGrid's Options. However, some props are ignored.
 
-## GeoTIFFSource
+## GeoTIFF
 
 Alternative to `ol.source.GetTIFF`.
 
@@ -98,7 +98,7 @@ If you don't need any of the above feature, you should use the official ol.sourc
 ### Sample
 
 ```Javascript
-const imageSource = new GeoTIFFSource({
+const imageSource = new GeoTIFF({
     files: [fileblob1, fileblob2],
     mode: "ndi",
     maxPixel: 1000*1000,

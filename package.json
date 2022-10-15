@@ -4,6 +4,7 @@
   "description": "OpenLayers Processed Source",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
     "gatsby": "gatsby build --prefix-paths",
     "start": "gatsby develop",

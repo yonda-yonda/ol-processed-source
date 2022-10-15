@@ -35,8 +35,8 @@ import proj4 from "proj4";
 import { register as olRegister } from "ol/proj/proj4";
 import { utils } from "geo4326";
 
-import { GeoTIFFSource } from "../../source/GeoTIFF";
-import { colormaps, rendermodes } from "../../geotiff/Reader";
+import GeoTIFFSource from "../../source/GeoTIFF";
+import { colormaps, rendermodes, RenderMode, Colormap } from "../../reader/geotiff";
 import { CANVAS_MAX_PIXEL } from "../../constants";
 
 const FileInputWrapper = styled("dl")({
@@ -123,9 +123,9 @@ const StyledUl = styled("ul")({
 });
 
 interface Input {
-  mode: string;
+  mode: RenderMode;
   maxPixel: string;
-  cmap: string;
+  cmap: Colormap;
   sources: {
     index: string;
     band: string;
@@ -149,9 +149,9 @@ interface LayerConf {
   layer: TileLayer<GeoTIFFSource>;
   sources: SourceConf[];
   id: string;
-  mode: string;
+  mode: RenderMode;
   maxPixel: number;
-  cmap?: string;
+  cmap?: Colormap;
 }
 
 const defaultSourcesValue = {
@@ -278,7 +278,7 @@ const Viewer = (): React.ReactElement => {
     criteriaMode: "all",
     defaultValues: {
       mode: "rgb",
-      cmap: "",
+      cmap: "jet",
       maxPixel: "1000000",
       sources: [
         { ...defaultSourcesValue, band: "1" },
@@ -644,7 +644,7 @@ const Viewer = (): React.ReactElement => {
                         e.target.value = "";
                         reset({
                           mode: "rgb",
-                          cmap: "",
+                          cmap: "jet",
                           maxPixel: "10000000",
                           sources: [
                             {
@@ -687,7 +687,7 @@ const Viewer = (): React.ReactElement => {
                               case "rgb": {
                                 reset({
                                   mode: "rgb",
-                                  cmap: "",
+                                  cmap: "jet",
                                   maxPixel: "10000000",
                                   sources: [
                                     { ...defaultSourcesValue, band: "1" },

@@ -27,7 +27,7 @@ import {
 } from "../utils";
 import { BaseSource, Options as BaseOptions } from "./Base";
 
-export type ImageSourceProps = {
+export type ImageSaticProps = {
     url?: string;
     file?: File;
     imageExtent: Extent;
@@ -42,13 +42,13 @@ export type ImageSourceProps = {
     "tileGrid" | "tileLoadFunction" | "tilePixelRatio" | "tileUrlFunction" |
     "state" | "url" | "urls">;
 
-export class ImageSource extends BaseSource {
+export default class ImageSatic extends BaseSource {
     private isGlobalGrid_: boolean;
     private context_: CanvasRenderingContext2D | null;
     private imageExtent_: Extent | null;
     private code_: string;
 
-    constructor(userOptions: ImageSourceProps) {
+    constructor(userOptions: ImageSaticProps) {
         const options = Object.assign({
             maxPixel: CANVAS_MAX_PIXEL,
             maxWidth: CANVAS_MAX_WIDTH,

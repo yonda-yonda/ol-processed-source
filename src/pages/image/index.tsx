@@ -29,7 +29,7 @@ import proj4 from "proj4";
 import { register as olRegister } from "ol/proj/proj4";
 import { utils } from "geo4326";
 
-import { ImageSource } from "../../source/Image";
+import ImageStatic from "../../source/ImageStatic";
 import { CANVAS_MAX_PIXEL } from "../../constants";
 
 const CodeStatus = styled("div")({
@@ -106,7 +106,7 @@ type FormError =
   | "UnsupportedCrs";
 
 interface LayerConf {
-  layer: TileLayer<ImageSource>;
+  layer: TileLayer<ImageStatic>;
   name: string;
   id: string;
   code: string;
@@ -305,9 +305,9 @@ const Viewer = (): React.ReactElement => {
           break;
         }
       }
-      let imageSource: ImageSource | null = null;
+      let imageSource: ImageStatic | null = null;
       try {
-        imageSource = new ImageSource({
+        imageSource = new ImageStatic({
           projection: code,
           file,
           url,

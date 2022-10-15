@@ -1,16 +1,15 @@
-
-import { Reader, Layer, RenderMode } from "./Reader";
-import { getTransformedCoordinates } from "./index";
+import { getTransformedCoordinates, Layer, RenderMode, Colormap } from "./index";
+import Reader from "./Reader";
 import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
-} from "../constants";
+} from "../../constants";
 import {
     adjustSize,
     clear,
     rotatePixelExtent,
-} from "../utils";
+} from "../../utils";
 
 export interface SampleConfig {
     index: number;
@@ -29,7 +28,7 @@ export interface SourceConfig {
 export type CreateProcessorProps = {
     urls?: string[];
     files?: File[];
-    cmap?: string;
+    cmap?: Colormap;
     mode?: RenderMode;
     maxPixel?: number;
     maxWidth?: number;
@@ -44,16 +43,16 @@ type ProcessorProps = {
     context: CanvasRenderingContext2D;
     width: number;
     height: number;
-    mode: string;
-    cmap: string | null;
+    mode: RenderMode;
+    cmap: Colormap | null;
 };
 
-export class Processor {
+export default class Processor {
     private context_: CanvasRenderingContext2D | null;
     width: number;
     height: number;
-    mode: string;
-    cmap: string | null;
+    mode: RenderMode;
+    cmap: Colormap | null;
     status: Status;
 
     constructor(options: ProcessorProps) {

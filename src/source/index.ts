@@ -1,2 +1,2 @@
-export * as Image from "./Image";
+export * as ImageStatic from "./ImageStatic";
 export * as GeoTIFF from "./GeoTIFF";
