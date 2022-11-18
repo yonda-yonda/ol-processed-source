@@ -430,6 +430,7 @@ const Viewer = (): React.ReactElement => {
         }
       } catch {
         setError("SourceError");
+        setLoading(false);
       }
     },
     [filelist, ol.map, layerConfs, reset]
