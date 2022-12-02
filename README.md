@@ -3,6 +3,8 @@
 Alternative to `ol.source`.
 Depends on OpenLayers(+v6.15.0), geotiff.js.
 
+[example pages](https://yonda-yonda.github.io/ol-processed-source/)
+
 ## Attention
 
 The source continues to hold the image internally as a canvas element.  
