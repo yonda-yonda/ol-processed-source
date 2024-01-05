@@ -82,23 +82,25 @@ export default class ImageSatic extends BaseSource {
             } catch { }
         }
         if (!projection) throw new Error("Unsupported projection.");
-        let imageExtent = [Infinity, Infinity, -Infinity, -Infinity] as Extent;
-        if (Array.isArray(options.imageExtent) && options.imageExtent.length > 3) {
-            imageExtent = options.imageExtent;
-        }
+        let imageExtent = options.imageExtent;
+        if (imageExtent.length < 4 ||
+            imageExtent[2] <= imageExtent[0] ||
+            imageExtent[3] <= imageExtent[1])
+            throw new Error("invalid extent.");
         const originExtentSize = [
             imageExtent[2] - imageExtent[0],
             imageExtent[3] - imageExtent[1],
         ];
         const originExtentAspectRatio = originExtentSize[0] / originExtentSize[1];
-        let gridExtent = imageExtent;
-        let gridExtentWidth = gridExtent[2] - gridExtent[0];
-        let gridExtentHeight = gridExtent[3] - gridExtent[1];
         let rad = 0;
         if (options.rotate) {
             rad = options.rotate;
             imageExtent = rotatePixelExtent(imageExtent, rad);
         }
+        let gridExtent = imageExtent;
+        let gridExtentWidth = gridExtent[2] - gridExtent[0];
+        let gridExtentHeight = gridExtent[3] - gridExtent[1];
+
         const tileLoadFunction = (imageTile: Tile, coordString: string) => {
             const [z, x, y] = coordString.split(",").map(Number);
             const canvas = document.createElement("canvas");
@@ -315,7 +317,7 @@ export default class ImageSatic extends BaseSource {
 
                 const maxResolution =
                     Math.max(gridExtentWidth, gridExtentHeight) / tileSize;
-                const tileGrid = new TileGrid({
+                this.tileGrid = new TileGrid({
                     extent: gridExtent,
                     tileSize: tileSize,
                     minZoom: options.minZoom,
@@ -325,11 +327,6 @@ export default class ImageSatic extends BaseSource {
                         maxResolution,
                     }),
                 });
-                if (!tileGrid) {
-                    this.setState("error");
-                    return;
-                }
-                this.tileGrid = tileGrid;
                 this.context_.canvas.width = rotatedWidth;
                 this.context_.canvas.height = rotatedHeight;
 
