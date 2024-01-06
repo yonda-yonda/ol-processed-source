@@ -1,5 +1,3 @@
-import { getTransformedCoordinates, Layer, RenderMode, Colormap } from "./index";
-import Reader from "./Reader";
 import {
     CANVAS_MAX_PIXEL,
     CANVAS_MAX_HEIGHT,
@@ -10,6 +8,11 @@ import {
     clear,
     rotatePixelExtent,
 } from "../../utils";
+
+import Reader from "./Reader";
+
+import { getTransformedCoordinates, Layer, RenderMode, Colormap } from "./index";
+
 
 export interface SampleConfig {
     index: number;
@@ -194,12 +197,12 @@ export default class Processor {
         }
         const image = await reader
             .render({
-                mode: mode,
+                mode,
                 cmap: cmap || undefined,
-                samples: samples,
+                samples,
                 width: imageWidth,
                 height: imageHeight,
-                layers: layers,
+                layers,
             });
         tempCanvas.width = image.width;
         tempCanvas.height = image.height;

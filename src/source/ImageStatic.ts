@@ -25,6 +25,7 @@ import {
     clear,
     rotatePixelExtent,
 } from "../utils";
+
 import { BaseSource, Options as BaseOptions } from "./Base";
 
 export type ImageSaticProps = {
@@ -319,11 +320,11 @@ export default class ImageSatic extends BaseSource {
                     Math.max(gridExtentWidth, gridExtentHeight) / tileSize;
                 this.tileGrid = new TileGrid({
                     extent: gridExtent,
-                    tileSize: tileSize,
+                    tileSize,
                     minZoom: options.minZoom,
                     resolutions: resolutionsFromExtent(gridExtent, {
                         maxZoom: options.maxZoom,
-                        tileSize: tileSize,
+                        tileSize,
                         maxResolution,
                     }),
                 });

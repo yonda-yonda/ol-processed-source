@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Link as GatsbyLink } from "gatsby";
-import { Helmet } from "react-helmet-async";
-import CssBaseline from "@mui/material/CssBaseline";
-import { Container, Paper, Typography, Stack } from "@mui/material";
-import TerrainIcon from "@mui/icons-material/Terrain";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import TerrainIcon from "@mui/icons-material/Terrain";
+import { Container, Paper, Typography, Stack } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/system";
+import * as React from "react";
+import { Helmet } from "react-helmet-async";
+import { Link as RouterLink } from "react-router-dom";
 
 const StyledPaper = styled(Paper)({
   display: "flex",
@@ -65,7 +65,7 @@ const Index = (): React.ReactElement => {
               Contents
             </Typography>
             <Stack mt={1} direction="row" spacing={2}>
-              <GatsbyLink
+              <RouterLink
                 to="/image"
                 style={{ color: "inherit", textDecoration: "inherit" }}
               >
@@ -78,8 +78,8 @@ const Index = (): React.ReactElement => {
                   <InsertPhotoIcon />
                   <span>Image</span>
                 </StyledPaper>
-              </GatsbyLink>
-              <GatsbyLink
+              </RouterLink>
+              <RouterLink
                 to="/geotiff"
                 style={{ color: "inherit", textDecoration: "inherit" }}
               >
@@ -92,7 +92,7 @@ const Index = (): React.ReactElement => {
                   <TerrainIcon />
                   <span>GeoTIFF</span>
                 </StyledPaper>
-              </GatsbyLink>
+              </RouterLink>
             </Stack>
           </section>
         </Stack>
