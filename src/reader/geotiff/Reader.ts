@@ -6,6 +6,8 @@ import {
     Pool,
 } from "geotiff";
 
+import { normalize } from "../../utils";
+
 import {
     getDataRange,
     RenderProps,
@@ -16,7 +18,6 @@ import {
     getColor,
     getUnit,
 } from "./index";
-import { normalize } from "../../utils";
 
 let pool: Pool | null = null;
 const getPool = () => {

@@ -1,6 +1,6 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
 import { Container, Typography } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import * as React from "react";
 
 const Noindex = (): React.ReactElement => {
   return (

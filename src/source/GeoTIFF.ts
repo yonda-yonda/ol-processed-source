@@ -15,8 +15,8 @@ import {
     CANVAS_MAX_HEIGHT,
     CANVAS_MAX_WIDTH,
 } from "../constants";
-import { getProfile, Profile } from "../reader/geotiff/Profile";
 import Processor, { CreateProcessorProps } from "../reader/geotiff/Processor";
+import { getProfile, Profile } from "../reader/geotiff/Profile";
 import {
     is4326,
     is3857,
@@ -25,6 +25,7 @@ import {
     crossing,
     clear,
 } from "../utils";
+
 import { BaseSource, Options as BaseOptions } from "./Base";
 
 export type { SampleConfig, SourceConfig } from "../reader/geotiff/Processor";
@@ -284,7 +285,7 @@ export default class GeoTIFF extends BaseSource {
                 } catch {
                     if (unit) {
                         projection = new Projection({
-                            code: code,
+                            code,
                             units: unit,
                         });
                     }

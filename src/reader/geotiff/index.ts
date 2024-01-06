@@ -1,5 +1,8 @@
-import type { GeoTIFFImage, TypedArray } from "geotiff";
+
 import colormap from "colormap";
+
+import type { GeoTIFFImage, TypedArray } from "geotiff";
+
 import { rotate } from "../../utils";
 
 export * as processor from "./Processor";

@@ -1,4 +1,9 @@
 import { fromUrl, fromBlob } from "geotiff";
+
+import {
+    rotatePixelExtent,
+} from "../../utils";
+
 import {
     getDataRange,
     getBandCount,
@@ -6,9 +11,6 @@ import {
     getUnit,
     getTransformedCoordinates,
 } from "./index";
-import {
-    rotatePixelExtent,
-} from "../../utils";
 
 export interface Profile {
     width: number; // affined

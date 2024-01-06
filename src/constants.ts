@@ -5,7 +5,7 @@ export const EXTENT: { [key: string]: Extent } = {
     4326: [-180, -90, 180, 90],
 };
 
-//https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas @2022
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas @2022
 export const CANVAS_MAX_PIXEL = 268435456;
 export const CANVAS_MAX_HEIGHT = 32767;
 export const CANVAS_MAX_WIDTH = 32767;
