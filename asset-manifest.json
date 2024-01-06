@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/ol-processed-source/static/css/main.6008e6dd.css",
+    "main.js": "/ol-processed-source/static/js/main.507d8d60.js",
+    "static/js/207.0c32a98a.chunk.js": "/ol-processed-source/static/js/207.0c32a98a.chunk.js",
+    "static/js/763.1cbb52de.chunk.js": "/ol-processed-source/static/js/763.1cbb52de.chunk.js",
+    "static/js/963.bdea4091.chunk.js": "/ol-processed-source/static/js/963.bdea4091.chunk.js",
+    "static/js/152.ec8e36f9.chunk.js": "/ol-processed-source/static/js/152.ec8e36f9.chunk.js",
+    "static/js/982.b80fe1a6.chunk.js": "/ol-processed-source/static/js/982.b80fe1a6.chunk.js",
+    "static/js/613.33c33b3a.chunk.js": "/ol-processed-source/static/js/613.33c33b3a.chunk.js",
+    "static/js/166.df5abd3a.chunk.js": "/ol-processed-source/static/js/166.df5abd3a.chunk.js",
+    "static/js/251.bf00ce86.chunk.js": "/ol-processed-source/static/js/251.bf00ce86.chunk.js",
+    "static/js/725.c70324f9.chunk.js": "/ol-processed-source/static/js/725.c70324f9.chunk.js",
+    "static/js/59.a97968e3.chunk.js": "/ol-processed-source/static/js/59.a97968e3.chunk.js",
+    "index.html": "/ol-processed-source/index.html",
+    "main.6008e6dd.css.map": "/ol-processed-source/static/css/main.6008e6dd.css.map",
+    "main.507d8d60.js.map": "/ol-processed-source/static/js/main.507d8d60.js.map",
+    "207.0c32a98a.chunk.js.map": "/ol-processed-source/static/js/207.0c32a98a.chunk.js.map",
+    "763.1cbb52de.chunk.js.map": "/ol-processed-source/static/js/763.1cbb52de.chunk.js.map",
+    "963.bdea4091.chunk.js.map": "/ol-processed-source/static/js/963.bdea4091.chunk.js.map",
+    "152.ec8e36f9.chunk.js.map": "/ol-processed-source/static/js/152.ec8e36f9.chunk.js.map",
+    "982.b80fe1a6.chunk.js.map": "/ol-processed-source/static/js/982.b80fe1a6.chunk.js.map",
+    "613.33c33b3a.chunk.js.map": "/ol-processed-source/static/js/613.33c33b3a.chunk.js.map",
+    "166.df5abd3a.chunk.js.map": "/ol-processed-source/static/js/166.df5abd3a.chunk.js.map",
+    "251.bf00ce86.chunk.js.map": "/ol-processed-source/static/js/251.bf00ce86.chunk.js.map",
+    "725.c70324f9.chunk.js.map": "/ol-processed-source/static/js/725.c70324f9.chunk.js.map",
+    "59.a97968e3.chunk.js.map": "/ol-processed-source/static/js/59.a97968e3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6008e6dd.css",
+    "static/js/main.507d8d60.js"
+  ]
+}
