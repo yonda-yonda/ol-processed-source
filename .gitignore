@@ -1,6 +1,5 @@
 node_modules/
-dist
+dist/
 .DS_Store
-public/*
-.cache/
+public/
 *.log

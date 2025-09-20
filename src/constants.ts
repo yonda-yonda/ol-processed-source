@@ -1,8 +1,8 @@
-import { Extent } from "ol/extent";
+import { type Extent } from "ol/extent";
 export const HALF_WORLD_3857 = Math.PI * 6378137;
 export const EXTENT: { [key: string]: Extent } = {
-    3857: [-HALF_WORLD_3857, -HALF_WORLD_3857, HALF_WORLD_3857, HALF_WORLD_3857],
-    4326: [-180, -90, 180, 90],
+  3857: [-HALF_WORLD_3857, -HALF_WORLD_3857, HALF_WORLD_3857, HALF_WORLD_3857],
+  4326: [-180, -90, 180, 90],
 };
 
 //https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas @2022

@@ -1,13 +1,12 @@
 import * as React from "react";
-import { Helmet } from "react-helmet-async";
 import {
   useForm,
   useFieldArray,
-  SubmitHandler,
+  type SubmitHandler,
   Controller,
 } from "react-hook-form";
-import CssBaseline from "@mui/material/CssBaseline";
 import {
+  Box,
   Container,
   Typography,
   Stack,
@@ -35,9 +34,14 @@ import proj4 from "proj4";
 import { register as olRegister } from "ol/proj/proj4";
 import { utils } from "geo4326";
 
-import GeoTIFFSource from "../../source/GeoTIFF";
-import { colormaps, rendermodes, RenderMode, Colormap } from "../../reader/geotiff";
-import { CANVAS_MAX_PIXEL } from "../../constants";
+import GeoTIFFSource from "~/source/GeoTIFF";
+import {
+  colormaps,
+  rendermodes,
+  type RenderMode,
+  type Colormap,
+} from "~/reader/geotiff";
+import { CANVAS_MAX_PIXEL } from "~/constants";
 
 const FileInputWrapper = styled("dl")({
   margin: "0 0 50px",
@@ -167,7 +171,7 @@ function useOl(props?: {
   zoom?: number;
   projection?: string;
 }): {
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;
   map: Map | undefined;
 } {
   const { center = fromLonLat([0, 0]), zoom = 1, projection } = { ...props };
@@ -214,7 +218,7 @@ function useOl(props?: {
   };
 }
 
-const Viewer = (): React.ReactElement => {
+const GeotiffViewer = (): React.ReactElement => {
   const ol = useOl();
   const [layerConfs, setLayerConfs] = React.useState<LayerConf[]>([]);
   const [filelist, setFilelist] = React.useState<File[]>([]);
@@ -228,7 +232,7 @@ const Viewer = (): React.ReactElement => {
     code: "EPSG:3857",
     error: false,
   });
-  const codeRef = React.useRef<HTMLInputElement>();
+  const codeRef = React.useRef<HTMLInputElement>(undefined);
 
   const changeMapProjection = React.useCallback(
     (code: string) => {
@@ -260,7 +264,7 @@ const Viewer = (): React.ReactElement => {
                 center: transform(center ?? [0, 0], prevCode, code),
                 zoom: view.getZoom() || 0,
                 projection,
-              })
+              }),
             );
           }
         }
@@ -270,7 +274,7 @@ const Viewer = (): React.ReactElement => {
         });
       }
     },
-    [ol.map]
+    [ol.map],
   );
 
   const { control, handleSubmit, reset, watch } = useForm<Input>({
@@ -314,7 +318,7 @@ const Viewer = (): React.ReactElement => {
         return newLayerConfs;
       });
     },
-    [ol.map]
+    [ol.map],
   );
 
   const onSubmit: SubmitHandler<Input> = React.useCallback(
@@ -433,30 +437,18 @@ const Viewer = (): React.ReactElement => {
         setLoading(false);
       }
     },
-    [filelist, ol.map, layerConfs, reset]
+    [filelist, ol.map, layerConfs, reset],
   );
   const watcher = watch();
 
   return (
     <>
-      <CssBaseline />
-      <Helmet>
-        <title>ol-processed-source / Display Local GeoTIFF File</title>
-        <meta name="description" content="Display local GeoTIFF file on map." />
-        <link
-          rel="canonical"
-          href="https://yonda-yonda.github.io/ol-processed-source/geotiff"
-        />
-        <link
-          rel="icon"
-          type="image/x-icon"
-          href="https://github.githubassets.com/favicon.ico"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-      </Helmet>
+      <title>ol-processed-source / Display Local GeoTIFF File</title>
+      <meta name="description" content="Display local GeoTIFF file on map." />
+      <link
+        rel="canonical"
+        href="https://yonda-yonda.github.io/ol-processed-source/geotiff"
+      />
       <Container>
         <Typography variant="h2" component="h1">
           ol-processed-source
@@ -464,9 +456,9 @@ const Viewer = (): React.ReactElement => {
         </Typography>
         <Stack my={4} spacing={4}>
           <Grid container spacing={2}>
-            <Grid item xs={9}>
-              <div style={{ position: "relative" }}>
-                <div
+            <Grid size={{ xs: 9 }}>
+              <Box style={{ position: "relative" }}>
+                <Box
                   ref={ol.ref}
                   style={{
                     width: "100%",
@@ -475,7 +467,7 @@ const Viewer = (): React.ReactElement => {
                 />
 
                 {!reprojection ? (
-                  <div>
+                  <Box>
                     <CodeStatus>view at {projection.code}</CodeStatus>
                     <Button
                       size="small"
@@ -487,19 +479,19 @@ const Viewer = (): React.ReactElement => {
                     >
                       Reprojection
                     </Button>
-                  </div>
+                  </Box>
                 ) : (
-                  <div>
+                  <Box>
                     <CodeInput>
-                      <div>
+                      <Box>
                         <TextField
                           inputRef={codeRef}
                           label="MapCode"
                           placeholder="EPSG:4326"
                           size="small"
                         />
-                      </div>
-                      <div>
+                      </Box>
+                      <Box>
                         <Button
                           variant="contained"
                           type="button"
@@ -509,8 +501,8 @@ const Viewer = (): React.ReactElement => {
                         >
                           Change
                         </Button>
-                      </div>
-                      <div>
+                      </Box>
+                      <Box>
                         <Button
                           variant="outlined"
                           type="button"
@@ -526,16 +518,16 @@ const Viewer = (): React.ReactElement => {
                         >
                           cancel
                         </Button>
-                      </div>
+                      </Box>
                     </CodeInput>
                     {projection.error && (
                       <FormHelperText>Unsupported Code.</FormHelperText>
                     )}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={{ xs: 3 }}>
               {layerConfs.length > 0 ? (
                 <StyledUl>
                   {layerConfs.map((item, i) => {
@@ -550,7 +542,7 @@ const Viewer = (): React.ReactElement => {
                           <LayerName>
                             <Tooltip
                               title={
-                                <div>
+                                <Box>
                                   {item.sources.map((source, i) => {
                                     return (
                                       <Typography
@@ -584,19 +576,21 @@ const Viewer = (): React.ReactElement => {
                                   <Typography variant="caption" display="block">
                                     Max Pixel: {item.maxPixel}px
                                   </Typography>
-                                </div>
+                                </Box>
                               }
                               arrow
                               placement="left"
                             >
                               <EllipsisTypography variant="body2">
-                                {(Array.from(
-                                  new Set(
-                                    item.sources.map((source) => {
-                                      return source.file;
-                                    })
-                                  )
-                                ) as string[]).reduce((prev, name) => {
+                                {(
+                                  Array.from(
+                                    new Set(
+                                      item.sources.map((source) => {
+                                        return source.file;
+                                      }),
+                                    ),
+                                  ) as string[]
+                                ).reduce((prev, name) => {
                                   return (
                                     prev + (prev.length > 0 ? "," : "") + name
                                   );
@@ -671,7 +665,7 @@ const Viewer = (): React.ReactElement => {
             </FileInputWrapper>
             {filelist.length > 0 && (
               <Grid container spacing={4} sx={{ mb: 4 }}>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Controller
                     control={control}
                     name="mode"
@@ -743,7 +737,7 @@ const Viewer = (): React.ReactElement => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   {fields.map((field, index) => {
                     return (
                       <Config key={field.id}>
@@ -918,7 +912,7 @@ const Viewer = (): React.ReactElement => {
                   })}
                 </Grid>
                 {watcher.mode !== "rgb" && (
-                  <Grid item xs={6}>
+                  <Grid size={{ xs: 6 }}>
                     <Controller
                       control={control}
                       name="cmap"
@@ -948,7 +942,7 @@ const Viewer = (): React.ReactElement => {
                     />
                   </Grid>
                 )}
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Controller
                     control={control}
                     name="maxPixel"
@@ -985,7 +979,7 @@ const Viewer = (): React.ReactElement => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <FormControl error={!!error}>
                     <Buttons>
                       <li>
@@ -1042,4 +1036,4 @@ const Viewer = (): React.ReactElement => {
     </>
   );
 };
-export default Viewer;
+export default GeotiffViewer;
