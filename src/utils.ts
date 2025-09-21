@@ -184,10 +184,10 @@ export function rotate(
 
 export function clear(
   canvas: HTMLCanvasElement,
-  context?: CanvasRenderingContext2D,
+  context: CanvasRenderingContext2D,
 ): void {
-  context?.resetTransform();
-  context?.clearRect(0, 0, canvas.width, canvas.height);
+  context.resetTransform();
+  context.clearRect(0, 0, canvas.width, canvas.height);
   canvas.width = 0;
   canvas.height = 0;
   canvas.remove();

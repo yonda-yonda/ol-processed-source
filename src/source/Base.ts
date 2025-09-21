@@ -1,13 +1,10 @@
-import ImageTile from "ol/ImageTile";
+import DataTile from "ol/DataTile.js";
 import { Projection } from "ol/proj";
-import ReprojTile from "ol/reproj/Tile";
-import TileImage from "ol/source/TileImage";
-import Tile from "ol/Tile";
-import TileState from "ol/TileState";
+import DataTileSource from "ol/source/DataTile";
 
-export type { Options } from "ol/source/TileImage";
+export type { Options } from "ol/source/DataTile";
 
-export abstract class BaseSource extends TileImage {
+export abstract class BaseSource extends DataTileSource {
   abstract getBoundingBox(dstCode?: string): number[] | null;
   abstract release(): void;
 
@@ -17,22 +14,23 @@ export abstract class BaseSource extends TileImage {
     y: number,
     pixelRatio: number,
     projection: Projection,
-  ): ImageTile | ReprojTile {
+  ): DataTile | null {
     try {
       // proj4's transform rarely raise error in ReprojTile
       return super.getTile(z, x, y, pixelRatio, projection);
     } catch {
-      const newTile = new ImageTile(
-        [z, x, y],
-        TileState.EMPTY,
-        "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
-        null,
-        (imageTile: Tile, src: string) => {
-          if (imageTile instanceof ImageTile)
-            (imageTile.getImage() as HTMLImageElement | HTMLVideoElement).src =
-              src;
+      const newTile = new DataTile({
+        tileCoord: [z, x, y],
+        loader: () => {
+          return new Promise<HTMLImageElement>((resolve) => {
+            const image = new Image();
+            image.addEventListener("load", () => resolve(image));
+            image.src =
+              "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7";
+          });
         },
-      );
+      });
+
       return newTile;
     }
   }

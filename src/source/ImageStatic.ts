@@ -1,12 +1,10 @@
 import { utils } from "geo4326";
 import { type Extent } from "ol/extent";
-import ImageTile from "ol/ImageTile";
 import { transform, get as getProjection } from "ol/proj";
 import { register } from "ol/proj/proj4";
-import Tile from "ol/Tile";
 import { DEFAULT_TILE_SIZE } from "ol/tilegrid/common";
 import TileGrid from "ol/tilegrid/TileGrid";
-import TileState from "ol/TileState";
+import { type LoaderOptions } from "ol/source/DataTile";
 import proj4 from "proj4";
 
 import {
@@ -38,16 +36,7 @@ export type ImageSaticProps = {
   minZoom?: number;
   maxZoom?: number;
   tileSize?: number;
-} & Omit<
-  BaseOptions,
-  | "tileGrid"
-  | "tileLoadFunction"
-  | "tilePixelRatio"
-  | "tileUrlFunction"
-  | "state"
-  | "url"
-  | "urls"
->;
+} & Omit<BaseOptions, "loader" | "tileGrid" | "state" | "bandCount">;
 
 export default class ImageSatic extends BaseSource {
   private isGlobalGrid_: boolean;
@@ -109,8 +98,12 @@ export default class ImageSatic extends BaseSource {
       rad = options.rotate;
       imageExtent = rotatePixelExtent(imageExtent, rad);
     }
-    const tileLoadFunction = (imageTile: Tile, coordString: string) => {
-      const [z, x, y] = coordString.split(",").map(Number);
+    const loader = (
+      z: number,
+      x: number,
+      y: number,
+      _: LoaderOptions,
+    ): HTMLCanvasElement => {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d", {
         storage: "discardable",
@@ -119,9 +112,8 @@ export default class ImageSatic extends BaseSource {
       const tempContext = tempCanvas.getContext("2d", {
         storage: "discardable",
       }) as CanvasRenderingContext2D;
-      if (!this.context_ || !context || !tempContext) {
-        imageTile.setState(TileState.ERROR);
-        return;
+      if (!this.context_) {
+        throw new Error("Failed setup loader.");
       }
       canvas.width = tileSize;
       canvas.height = tileSize;
@@ -163,7 +155,7 @@ export default class ImageSatic extends BaseSource {
             [tileLeft, tileBottom, tileRight, tileTop],
           )
         ) {
-          imageTile.setState(TileState.EMPTY);
+          throw new Error("Not overlapping.");
         }
       }
       const sourcePerPixel = [
@@ -204,8 +196,7 @@ export default class ImageSatic extends BaseSource {
       ];
 
       if (Math.min(...sourceRectSize, ...tileRectSize) <= 0) {
-        imageTile.setState(TileState.EMPTY);
-        return;
+        throw new Error("Not overlapping.");
       }
       tempCanvas.width = sourceRectSize[0];
       tempCanvas.height = sourceRectSize[1];
@@ -231,20 +222,15 @@ export default class ImageSatic extends BaseSource {
         tileRectSize[0],
         tileRectSize[1],
       );
-
-      const src = canvas.toDataURL();
-      ((imageTile as ImageTile).getImage() as HTMLImageElement).src = src;
-
       clear(tempCanvas, tempContext);
-      clear(canvas, context);
+      return canvas;
     };
 
     super(
       Object.assign({}, options, {
         state: "loading",
         projection,
-        tileLoadFunction,
-        url: "{z},{x},{y}",
+        loader,
       }) as BaseOptions,
     );
 

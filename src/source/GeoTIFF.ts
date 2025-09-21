@@ -1,12 +1,10 @@
 import { utils } from "geo4326";
 import { type Extent } from "ol/extent";
-import ImageTile from "ol/ImageTile";
 import { transform, get as getProjection, Projection } from "ol/proj";
 import { register } from "ol/proj/proj4";
-import Tile from "ol/Tile";
 import { DEFAULT_TILE_SIZE } from "ol/tilegrid/common";
 import TileGrid from "ol/tilegrid/TileGrid";
-import TileState from "ol/TileState";
+import { type LoaderOptions } from "ol/source/DataTile";
 import proj4 from "proj4";
 
 import {
@@ -38,20 +36,17 @@ export type GeoTIFFProps = {
 } & Omit<CreateProcessorProps, "minSize"> &
   Omit<
     BaseOptions,
-    | "tileGrid"
-    | "tileLoadFunction"
-    | "tilePixelRatio"
-    | "tileUrlFunction"
-    | "crossOrigin"
+    | "loader"
+    | "maxResolution"
     | "projection"
+    | "tileGrid"
     | "state"
-    | "url"
-    | "urls"
+    | "bandCount"
+    | "crossOrigin"
   >;
 
 export default class GeoTIFF extends BaseSource {
   private processor_: Processor | null;
-  private tileSize_: number;
   private isGlobalGrid_: boolean;
   private imageExtent_: Extent | null;
   private gridExtent_: Extent | null;
@@ -77,8 +72,12 @@ export default class GeoTIFF extends BaseSource {
     const tileSize = options.tileSize;
     if (tileSize < 256) throw new Error("tileSize is too small.");
 
-    const tileLoadFunction = (imageTile: Tile, coordString: string) => {
-      const [z, x, y] = coordString.split(",").map(Number);
+    const loader = (
+      z: number,
+      x: number,
+      y: number,
+      _: LoaderOptions,
+    ): HTMLCanvasElement => {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d", {
         storage: "discardable",
@@ -88,18 +87,12 @@ export default class GeoTIFF extends BaseSource {
         storage: "discardable",
       }) as CanvasRenderingContext2D;
       const context_ = this.processor_?.getContext();
-      if (
-        !this.imageExtent_ ||
-        !this.gridExtent_ ||
-        !context_ ||
-        !context ||
-        !tempContext
-      ) {
-        imageTile.setState(TileState.ERROR);
-        return;
+      if (!this.imageExtent_ || !this.gridExtent_ || !context_) {
+        throw new Error("Failed setup loader.");
       }
-      canvas.width = this.tileSize_;
-      canvas.height = this.tileSize_;
+      const [width, height] = this.getTileSize(z);
+      canvas.width = width;
+      canvas.height = height;
 
       const window = getWindow(
         this.isGlobalGrid_ ? this.gridExtent_ : this.imageExtent_,
@@ -139,8 +132,7 @@ export default class GeoTIFF extends BaseSource {
             [tileLeft, tileBottom, tileRight, tileTop],
           )
         ) {
-          imageTile.setState(TileState.EMPTY);
-          return;
+          throw new Error("Not overlapping.");
         }
       }
 
@@ -149,8 +141,8 @@ export default class GeoTIFF extends BaseSource {
         (imageExtentTop - imageExtentBottom) / context_.canvas.height,
       ];
       const tilePerPixel = [
-        (tileRight - tileLeft) / this.tileSize_,
-        (tileTop - tileBottom) / this.tileSize_,
+        (tileRight - tileLeft) / width,
+        (tileTop - tileBottom) / height,
       ];
       const leftBottom = [
         Math.max(tileLeft, imageExtentLeft),
@@ -181,8 +173,7 @@ export default class GeoTIFF extends BaseSource {
         tileRect[3] - tileRect[1],
       ];
       if (Math.min(...sourceRectSize, ...tileRectSize) <= 0) {
-        imageTile.setState(TileState.EMPTY);
-        return;
+        throw new Error("Not overlapping.");
       }
       tempCanvas.width = sourceRectSize[0];
       tempCanvas.height = sourceRectSize[1];
@@ -207,23 +198,18 @@ export default class GeoTIFF extends BaseSource {
         tileRectSize[0],
         tileRectSize[1],
       );
-
-      const src = canvas.toDataURL();
-      ((imageTile as ImageTile).getImage() as HTMLImageElement).src = src;
-
       clear(tempCanvas, tempContext);
-      clear(canvas, context);
+      return canvas;
     };
+
     super(
       Object.assign({}, options, {
         state: "loading",
-        tileLoadFunction,
-        url: "{z},{x},{y}",
+        loader,
       }) as BaseOptions,
     );
 
     this.processor_ = null;
-    this.tileSize_ = options.tileSize;
     this.isGlobalGrid_ = false;
     this.imageExtent_ = null;
     this.gridExtent_ = null;
@@ -347,7 +333,7 @@ export default class GeoTIFF extends BaseSource {
     }
     this.imageExtent_ = imageExtent;
     this.gridExtent_ = gridExtent;
-    const tileSize = this.tileSize_;
+    const tileSize = options.tileSize || DEFAULT_TILE_SIZE;
 
     const maxResolution =
       Math.max(gridExtentWidth, gridExtentHeight) / tileSize;

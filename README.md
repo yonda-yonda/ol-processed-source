@@ -9,10 +9,12 @@ Depends on OpenLayers(+v6.15.0), geotiff.js.
 
 The source continues to hold the image internally as a canvas element.  
 Note that loading large images consumes large memory.  
-To display a large number of layers at the same time, it is recommended to use the official methods.
+To display a large number of layers at the same time, it is recommended to use
+the official methods.
 
 An upper limit can be set for a canvas size.  
-If a size of loaded image is larger than maxSize, an image is scaled down. So, that maximum resolution to be worse.
+If a size of loaded image is larger than maxSize, an image is scaled down. So,
+that maximum resolution to be worse.
 
 Other than that, displaying tiles also consumes memory.
 
@@ -32,7 +34,8 @@ Also, the performance of `Reader.render` is not optimal.
 Alternative to `ol.source.ImageStatic`.
 
 - Support KML-like rotation.
-- It can also be displayed in a projection system other than the one specified by source. (Official ol.source.ImageStatic fail in some cases.)
+- It can also be displayed in a projection system other than the one specified
+  by source. (Official ol.source.ImageStatic fails in some cases.)
 - Area beyond +-180 degrees latitude can also be displayed when wrapX is true.
 
 ### Sample

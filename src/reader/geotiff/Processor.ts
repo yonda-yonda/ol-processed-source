@@ -79,18 +79,18 @@ export default class Processor {
 
   static async create(options: CreateProcessorProps): Promise<Processor> {
     const reader = new Reader({ files: options.files, urls: options.urls });
-    const maxPixel = options?.maxPixel ?? CANVAS_MAX_PIXEL;
+    const maxPixel = options.maxPixel ?? CANVAS_MAX_PIXEL;
     if (maxPixel > CANVAS_MAX_PIXEL) throw new Error("maxPixel is too large.");
-    const maxHeight = options?.maxHeight ?? CANVAS_MAX_HEIGHT;
+    const maxHeight = options.maxHeight ?? CANVAS_MAX_HEIGHT;
     if (maxHeight > CANVAS_MAX_HEIGHT)
       throw new Error("maxHeight is too large.");
-    const maxWidth = options?.maxWidth ?? CANVAS_MAX_WIDTH;
+    const maxWidth = options.maxWidth ?? CANVAS_MAX_WIDTH;
     if (maxWidth > CANVAS_MAX_WIDTH) throw new Error("maxWidth is too large.");
-    const minSize = options?.minSize ?? 1;
+    const minSize = options.minSize ?? 1;
     if (minSize < 1) throw new Error("minSize is too small.");
 
-    const mode = options.mode || "rgb";
-    const cmap = options.cmap || null;
+    const mode = options.mode ?? "rgb";
+    const cmap = options.cmap ?? null;
 
     let imageWidth = 0;
     let imageHeight = 0;
@@ -98,7 +98,7 @@ export default class Processor {
     let originExtentAspectRatio = 1;
     let angle = 0;
 
-    const sources = options.sources || [];
+    const sources = options.sources;
     const samples: SampleConfig[] = [];
     const layers: Layer[] = [];
     const mapping: [number, number, number | undefined, number | undefined][] =
@@ -191,12 +191,9 @@ export default class Processor {
     const tempContext = tempCanvas.getContext("2d", {
       storage: "discardable",
     }) as CanvasRenderingContext2D;
-    if (!context || !tempContext) {
-      throw Error("unexpected error.");
-    }
     const image = await reader.render({
       mode: mode,
-      cmap: cmap || undefined,
+      cmap: cmap ?? undefined,
       samples: samples,
       width: imageWidth,
       height: imageHeight,
